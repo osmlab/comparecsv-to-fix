@@ -1,0 +1,15 @@
+# Some Files #
+###################
+*.csv
+*.gz
+*.geojson
+*.osc
+*.jar
+*.osm
+*.05m
+*.zip
+*.bz2
+*.pbf
+node_modules/
+.DS_Store
+*.*~
