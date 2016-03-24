@@ -37,8 +37,18 @@ module.exports = {
 						var rows = results.rows;
 						for (var i = 0; i < rows.length; i++) {
 							var obj = JSON.parse(rows[i].value.split('|').join('"'));
-							if (i == 0) items.push(_.keys(obj).join(','));
-							items.push(_.values(obj).join(','));
+							if (i === 0) {
+								var header = _.keys(obj);
+								items.push(header.join(','));
+							} else {
+								var item = _.values(obj);
+								var way = item[0];
+								var geom = item[1];
+								if (geom.indexOf('LINESTRING') > -1 || geom.indexOf('MULTIPOINT') > -1) {
+									geom = '"' + geom + '"';
+								}
+								items.push(way + ',' + geom);
+							}
 						}
 						cb(items);
 					});

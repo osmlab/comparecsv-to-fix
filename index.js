@@ -16,7 +16,9 @@ tofixdb.getItems(idtask, function(items) {
     output: process.stdout,
     terminal: false
   });
-  console.log(items[0]);
+
+  if (items[0])
+    console.log(items[0]);
   rd.on('line', function(line) {
     if (items.indexOf(line) == -1) {
       console.log(line);
