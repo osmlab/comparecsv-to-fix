@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-
 'use strict';
 var fs = require('fs');
 var pg = require('pg');
@@ -20,7 +19,7 @@ tofixdb.getItems(idtask, function(items) {
   if (items[0])
     console.log(items[0]);
   rd.on('line', function(line) {
-    if (items.indexOf(line) == -1) {
+    if (items.indexOf(line) === -1) {
       console.log(line);
     }
   });
