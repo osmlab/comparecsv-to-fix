@@ -6,7 +6,6 @@ var _ = require('underscore');
 var readline = require('readline');
 var tofixdb = require('./src/tofixdb');
 var argv = require('minimist')(process.argv.slice(2));
-
 var idtask = argv.idtask;
 var comparefile = argv._[0];
 tofixdb.getItems(idtask, function(items) {
