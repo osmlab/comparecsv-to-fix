@@ -1,8 +1,9 @@
 #!/usr/bin/env node
+
 'use strict';
 var fs = require('fs');
 var pg = require('pg');
-var _ = require('underscore');
+
 var readline = require('readline');
 var tofixdb = require('./src/tofixdb');
 var argv = require('minimist')(process.argv.slice(2));
@@ -14,9 +15,6 @@ tofixdb.getItems(idtask, function(items) {
     output: process.stdout,
     terminal: false
   });
-
-  if (items[0])
-    console.log(items[0]);
   rd.on('line', function(line) {
     if (items.indexOf(line) === -1) {
       console.log(line);

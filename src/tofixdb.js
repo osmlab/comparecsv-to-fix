@@ -16,23 +16,27 @@ module.exports = {
   getItems: function(idtask, done) {
     pg.connect(conString, function(err, client) {
       if (err) return console.log(err);
-      var task;
+      var subQueries = [];
       queue(1)
         .defer(function(cb) {
-          var query = 'SELECT id, tasktable FROM task_details where id = $1;';
-          client.query(query, [idtask], function(err, results) {
+          var query = 'SELECT table_name as tasktable FROM information_schema.tables' +
+            ' WHERE  table_name LIKE \'' + idtask + '\' || \'%\'' +
+            ' AND table_name NOT LIKE \'%_stats\'' +
+            ' AND    LENGTH(table_name) = ' + (idtask.length + 3) + ';';
+          client.query(query, function(err, results) {
             if (err) {
               console.error(err);
               return;
             }
-            task = results.rows[0];
+            results.rows.forEach(function(val) {
+              var subQuery = 'SELECT b.value FROM ' + idtask + '_stats as a INNER JOIN ' + val.tasktable + ' as b  ON a.attributes->\'key\' = b.key AND a.attributes->\'action\'=\'noterror\'';
+              subQueries.push(subQuery);
+            });
             cb();
           });
-        }).defer(function(cb) {
-          var query = 'SELECT b.value' +
-            ' FROM ' + task.id + '_stats as a' +
-            ' INNER JOIN ' + task.tasktable + ' as b' +
-            ' ON a.attributes->\'key\' = b.key AND a.attributes->\'action\'=\'noterror\'';
+        })
+        .defer(function(cb) {
+          var query = subQueries.join(' UNION ') + ';';
           client.query(query, function(err, results) {
             if (err) {
               console.error(err);
@@ -42,18 +46,13 @@ module.exports = {
             var rows = results.rows;
             for (var i = 0; i < rows.length; i++) {
               var obj = JSON.parse(rows[i].value.split('|').join('"'));
-              if (i === 0) {
-                var header = _.keys(obj);
-                items.push(header.join(','));
-              } else {
-                var item = _.values(obj);
-                var way = item[0];
-                var geom = item[1];
-                if (geom.indexOf('LINESTRING') > -1 || geom.indexOf('MULTIPOINT') > -1) {
-                  geom = '"' + geom + '"';
-                }
-                items.push(way + ',' + geom);
+              var item = _.values(obj);
+              var way = item[0];
+              var geom = item[1];
+              if (geom.indexOf('LINESTRING') > -1 || geom.indexOf('MULTIPOINT') > -1) {
+                geom = '"' + geom + '"';
               }
+              items.push(way + ',' + geom);
             }
             cb(items);
           });
