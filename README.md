@@ -30,6 +30,6 @@ npm install && npm link
 ## How to use
 
 ```
-comparecsvtofix --idtask=unconnectedmajorhighways nodeendingnearhighway.csv > result.csv
+comparecsvtofix --idtask=unconnectedmajorhighways unconnected-major-highways.csv > result.csv
 
 ```
