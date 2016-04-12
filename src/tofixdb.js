@@ -22,6 +22,7 @@ module.exports = {
           var query = 'SELECT table_name as tasktable FROM information_schema.tables' +
             ' WHERE  table_name LIKE \'' + idtask + '\' || \'%\'' +
             ' AND table_name NOT LIKE \'%_stats\'' +
+            ' AND table_name NOT LIKE \'%_noterror\'' +
             ' AND    LENGTH(table_name) = ' + (idtask.length + 3) + ';';
           client.query(query, function(err, results) {
             if (err) {
@@ -36,6 +37,7 @@ module.exports = {
           });
         })
         .defer(function(cb) {
+          subQueries.push('SELECT value FROM ' + idtask + '_noterror');
           var query = subQueries.join(' UNION ') + ';';
           client.query(query, function(err, results) {
             if (err) {
