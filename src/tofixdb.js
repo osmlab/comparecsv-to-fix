@@ -51,10 +51,12 @@ module.exports = {
               var item = _.values(obj);
               var way = item[0];
               var geom = item[1];
-              if (geom.indexOf('LINESTRING') > -1 || geom.indexOf('MULTIPOINT') > -1) {
-                geom = '"' + geom + '"';
+              if (geom) {
+                if (geom.indexOf('LINESTRING') > -1 || geom.indexOf('MULTIPOINT') > -1) {
+                  geom = '"' + geom + '"';
+                }
+                items.push(way + ',' + geom);
               }
-              items.push(way + ',' + geom);
             }
             cb(items);
           });
