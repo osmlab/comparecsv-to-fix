@@ -1,23 +1,6 @@
-# comparecsv-tofix
+# compare osmlint  and tofix data
 
-Compare CSV files before upload in to-fix. the CSV files must come from [osmlint2csv](https://github.com/osmlab/osmlint2csv).
-
-`comparecsv-to-fix` will extract data from to-fix DB, the items that have been marked as `not-an-error` and then `comparecsv-to-fix` will read the new file which you want to upload to-fix, finally the app will  make a comparison between these two datasets,  the output will be items that have not been marked as `not-an-error`.
-
-This will help on focused in items which need to resolve through to-fix. and not on the `not-an-error` issues.
-
-## Setting up  the access to DB
-
-For accessing to the database you are required to set the environment variables
-
-
-```
-  export DBUsername='postgres'
-  export DBPassword='1234'
-  export DBAddress='database'
-  export Database='dbtofix'
-
-```
+Compare osmlint output file between to-fix tasks, especially to compare noterror items in task.
 
 ## Install
 
@@ -30,6 +13,6 @@ npm install && npm link
 ## How to use
 
 ```
-comparecsvtofix --idtask=unconnectedmajorhighways unconnected-major-highways.csv > result.csv
+compareosmlinttofix <urloftask> unconnected-major-highways.json > unconnected-major-highways-new.json
 
 ```
