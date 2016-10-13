@@ -5,13 +5,11 @@
   "main": "index.js",
   "dependencies": {
     "minimist": "^1.2.0",
-    "pg": "^4.5.1",
-    "queue-async": "^1.2.1",
     "readline": "^1.3.0",
-    "underscore": "^1.8.3"
+    "request": "^2.75.0"
   },
   "bin": {
-    "comparecsvtofix": "index.js"
+    "compareosmlinttofix": "index.js"
   },
   "devDependencies": {
     "eslint": "^2.5.3",
